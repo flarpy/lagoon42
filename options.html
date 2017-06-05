@@ -4,7 +4,7 @@
             <h4 class="panel-title">
                 <a role="button" data-toggle="collapse" data-parent="#lagoonOptions" data-target="#collapse{{key}}_{{$index}}"
                    aria-expanded="false" aria-controls="collapse{{key}}_{{$index}}">
-                    {{option.title}} (&pound;{{calcOptionTotal(option)|number:2}})
+                    {{option.title}} ({{currency.symbol}}{{calcOptionTotal(option)|number:2}})
                 </a>
             </h4>
         </div>
@@ -16,7 +16,7 @@
                         <td><input ng-click="calcTotal()" ng-disabled="item.disabled === true" type="checkbox" ng-model="item.selected" id="item_{{$parent.$index}}_{{$index}}"/>
                             <label ng-class="{'disabled':item.disabled === true}" uib-tooltip="{{item.tooltip}}" for="item_{{$parent.$index}}_{{$index}}">{{item.name}}</label>
                         </td>
-                        <td ng-class="{'disabled':item.disabled === true}">&pound;{{displayPrice(item) | number : 2}}</td>
+                        <td ng-class="{'disabled':item.disabled === true}">{{currency.symbol}}{{displayPrice(item) | number : 2}}</td>
                     </tr>
                 </table>
             </div>

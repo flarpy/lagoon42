@@ -60,7 +60,7 @@
             width: 50%;
             z-index: 999;
             background-color: white;
-            font-size:40px;
+            font-size: 40px;
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular.min.js"
@@ -79,12 +79,25 @@
         }]);
         myApp.controller('OptionsController', ['$scope', '$http', '$location', '$timeout', function ($scope, $http, $location, $timeout) {
 
-            $scope.currency = {
-                name: 'GBP',
-                symbol: '&pound'
+            $scope.currencies = {
+                gbp: {
+                    name: 'GBP',
+                    symbol: '£',
+                    exchangeRate: 0.84
+
+                },
+                eur: {
+                    name: 'EUR',
+                    symbol: '€',
+                    exchangeRate: 1
+                }
             }
 
-            $scope.exchangeRate = 0.84;
+            $scope.currency = $scope.currencies.gbp;
+
+            $scope.toggleCurrency = function () {
+                $scope.currency = $scope.currency.name === 'GBP' ? $scope.currencies.eur : $scope.currencies.gbp;
+            }
 
             $scope.total = 0;
 
@@ -1229,9 +1242,9 @@
 
             $scope.displayPrice = function (item) {
                 if (typeof item.displayPrice !== 'undefined') {
-                    return item.displayPrice * $scope.exchangeRate;
+                    return item.displayPrice * $scope.currency.exchangeRate;
                 } else {
-                    return item.price * $scope.exchangeRate;
+                    return item.price * $scope.currency.exchangeRate;
                 }
             }
 
@@ -1242,7 +1255,7 @@
             $scope.selectPackage = function (selectedPackage) {
                 angular.forEach($scope.packages, function (package) {
                     if (selectedPackage === package) {
-                        $scope.total += package.price * $scope.exchangeRate;
+                        $scope.total += package.price * $scope.currency.exchangeRate;
                     } else {
                         package.selected = false;
                     }
@@ -1253,11 +1266,11 @@
             $scope.calcTotal = function () {
                 $scope.link = '';
                 $scope.total = 0;
-                total += $scope.basePrice * $scope.exchangeRate;
+                total += $scope.basePrice * $scope.currency.exchangeRate;
 
                 angular.forEach($scope.packages, function (package) {
                     if (package.selected === true) {
-                        $scope.total += package.price * $scope.exchangeRate;
+                        $scope.total += package.price * $scope.currency.exchangeRate;
                     }
                 })
 
@@ -1348,14 +1361,11 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6 form-inline">
-            <div id="total">Total inc {{taxRate}}% tax: &pound;{{total * (1 +
+            <div id="total">Total inc {{taxRate}}% tax: <span style="cursor: pointer" ng-click="toggleCurrency()">{{currency.symbol}}</span>{{total
+                * (1 +
                 taxRate/100)
                 | number : 2}} <span style="font-size:12px">ex tax {{total|number}}</span></div>
-            <div style="margin:90px 0 50px 0;width:100%" class="form-group">
-                <button type="button" class="btn btn-success" ng-click="save()">Get shareable link of config chosen </button>
-                <input ng-model="link" class="form-control" style="min-width:60%">
-            </div>
-            <ul class="nav nav-tabs" role="tablist">
+            <ul class="nav nav-tabs" role="tablist" style="margin-top:70px">
                 <li role="presentation" class="active">
                     <a data-target="#packages" aria-controls="packages" role="tab" data-toggle="tab">Packages</a></li>
                 <li role="presentation">
@@ -1365,6 +1375,9 @@
                 <li role="presentation">
                     <a data-target="#ancasta" aria-controls="ancasta" role="tab" data-toggle="tab">Ancasta Fit Options
                         ({{countSelectedOptions('ancasta')}})</a>
+                </li>
+                <li role="presentation">
+                    <a data-target="#save" aria-controls="save" role="tab" data-toggle="tab">Save</a>
                 </li>
             </ul>
 
@@ -1380,6 +1393,15 @@
                 </div>
                 <div role="tabpanel" ng-repeat="(key, option) in options" class="tab-pane fade in" id="{{key}}"
                      ng-include="'/options.html'"></div>
+                <div role="tabpanel" id="save" class="tab-pane fade in form-inline">
+                    <div class="jumbotron">To save your selection, press the green button below and then copy the URL from the box. You can also share this link with others.</div>
+                    <div class="form-group" style="width:100%">
+                        <button type="button" class="btn btn-success" ng-click="save()">Get shareable link of config
+                            chosen
+                        </button>
+                        <input ng-model="link" class="form-control" style="min-width:60%">
+                    </div>
+                </div>
             </div>
         </div>
         <div class="col-md-6">
