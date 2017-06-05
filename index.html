@@ -100,6 +100,16 @@
                 $scope.calcTotal();
             }
 
+            $scope.editExchangeRate = function () {
+                $scope.editingExchangeRate = $scope.editingExchangeRate === true ? false : true;
+            }
+
+            $scope.exchangeRateKeyup = function (event) {
+                if (event.keyCode === 13) {
+                    $scope.editingExchangeRate = false;
+                }
+            }
+
             $scope.total = 0;
 
             $scope.taxRate = 20; // %
@@ -1363,7 +1373,9 @@
             <div id="total">Total inc {{taxRate}}% tax: <span style="cursor: pointer" ng-click="toggleCurrency()">{{currency.symbol}}</span>{{total
                 * (1 +
                 taxRate/100)
-                | number : 2}} <span style="font-size:12px">ex tax {{total|number}} @{{currency.exchangeRate}}</span></div>
+                | number : 2}} <span style="font-size:12px">ex tax {{total|number}} @
+                    <span ng-click="editExchangeRate()">{{currency.exchangeRate}}</span>
+                    <input ng-show="editingExchangeRate === true" ng-model="currency.exchangeRate" ng-keyup="exchangeRateKeyup($event)"></span></div>
             <ul class="nav nav-tabs" role="tablist" style="margin-top:70px">
                 <li role="presentation" class="active">
                     <a data-target="#packages" aria-controls="packages" role="tab" data-toggle="tab">Packages</a></li>
