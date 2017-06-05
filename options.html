@@ -1,8 +1,8 @@
-<div class="panel-group" id="lagoonOptions" role="tablist" aria-multiselectable="true">{{optionSet}}
+<div class="panel-group" id="{{key}}Options" role="tablist" aria-multiselectable="true">{{optionSet}}
     <div class="panel panel-default" ng-repeat="option in options[key]">
         <div class="panel-heading" role="tab" id="option{{$index}}">
             <h4 class="panel-title">
-                <a role="button" data-toggle="collapse" data-parent="#lagoonOptions" data-target="#collapse{{key}}_{{$index}}"
+                <a role="button" data-toggle="collapse" data-parent="#{{key}}Options" data-target="#collapse{{key}}_{{$index}}"
                    aria-expanded="false" aria-controls="collapse{{key}}_{{$index}}">
                     {{option.title}} ({{currency.symbol}}{{calcOptionTotal(option)|number:2}})
                 </a>
