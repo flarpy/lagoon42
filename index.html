@@ -97,6 +97,7 @@
 
             $scope.toggleCurrency = function () {
                 $scope.currency = $scope.currency.name === 'GBP' ? $scope.currencies.eur : $scope.currencies.gbp;
+                $scope.calcTotal();
             }
 
             $scope.total = 0;
@@ -1254,9 +1255,7 @@
 
             $scope.selectPackage = function (selectedPackage) {
                 angular.forEach($scope.packages, function (package) {
-                    if (selectedPackage === package) {
-                        $scope.total += package.price * $scope.currency.exchangeRate;
-                    } else {
+                    if (selectedPackage !== package) {
                         package.selected = false;
                     }
                 });
@@ -1364,7 +1363,7 @@
             <div id="total">Total inc {{taxRate}}% tax: <span style="cursor: pointer" ng-click="toggleCurrency()">{{currency.symbol}}</span>{{total
                 * (1 +
                 taxRate/100)
-                | number : 2}} <span style="font-size:12px">ex tax {{total|number}}</span></div>
+                | number : 2}} <span style="font-size:12px">ex tax {{total|number}} @{{currency.exchangeRate}}</span></div>
             <ul class="nav nav-tabs" role="tablist" style="margin-top:70px">
                 <li role="presentation" class="active">
                     <a data-target="#packages" aria-controls="packages" role="tab" data-toggle="tab">Packages</a></li>
