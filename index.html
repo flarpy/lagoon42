@@ -102,11 +102,13 @@
 
             $scope.editExchangeRate = function () {
                 $scope.editingExchangeRate = $scope.editingExchangeRate === true ? false : true;
+                $scope.calcTotal();
             }
 
             $scope.exchangeRateKeyup = function (event) {
                 if (event.keyCode === 13) {
                     $scope.editingExchangeRate = false;
+                    $scope.calcTotal();
                 }
             }
 
