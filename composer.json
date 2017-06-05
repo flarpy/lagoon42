@@ -1,0 +1,12 @@
+{
+    "name": "root/nautitech40",
+    "require": {
+        "predis/predis": "^1.1"
+    },
+    "authors": [
+        {
+            "name": "Peter Dunham",
+            "email": "peter@peterdunham.me.uk"
+        }
+    ]
+}

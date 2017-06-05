@@ -1,0 +1,24 @@
+<div class="panel-group" id="lagoonOptions" role="tablist" aria-multiselectable="true">{{optionSet}}
+    <div class="panel panel-default" ng-repeat="option in options[key]">
+        <div class="panel-heading" role="tab" id="option{{$index}}">
+            <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#lagoonOptions" data-target="#collapse{{key}}_{{$index}}"
+                   aria-expanded="false" aria-controls="collapse{{key}}_{{$index}}">
+                    {{option.title}} (&pound;{{calcOptionTotal(option)|number:2}})
+                </a>
+            </h4>
+        </div>
+
+        <div id="collapse{{key}}_{{$index}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="option{{$index}}">
+            <div class="panel-body">
+                <table class="optionsTable">
+                    <tr ng-repeat="item in option.items">
+                        <td><input ng-click="calcTotal()" ng-disabled="item.disabled === true" type="checkbox" ng-model="item.selected" id="item_{{$parent.$index}}_{{$index}}"/>
+                            <label ng-class="{'disabled':item.disabled === true}" uib-tooltip="{{item.tooltip}}" for="item_{{$parent.$index}}_{{$index}}">{{item.name}}</label>
+                        </td>
+                        <td ng-class="{'disabled':item.disabled === true}">&pound;{{displayPrice(item) | number : 2}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,1393 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+    <style type="text/css">
+        td.disabled {
+            color: #C0C0C0;
+        }
+
+        td input[type="checkbox"] {
+            margin: 5px 10px 2px 5px
+        }
+
+        .tab-pane {
+            padding: 5px;
+        }
+
+        .optionsTable {
+            margin-bottom: 15px;
+            min-width: 800px;
+        }
+
+        .optionsTable td:first-child {
+            width: 650px;
+            overflow: auto;
+        }
+
+        .optionsTable td:last-child {
+            text-align: right;
+            min-width: 80px;
+        }
+
+        table.packages td {
+            padding: 5px;
+        }
+
+        table.packages {
+            margin: 25px 0 25px 0;
+        }
+
+        table.packages tr:nth-child(even) {
+            background-color: #E0E0E0;
+        }
+
+        table.optionsTable tr:hover {
+            background-color: #E0E0E0;
+        }
+
+        label {
+            font-weight: normal !important;
+        }
+
+        .disabled {
+            color: #C0C0C0;
+        }
+
+        #total {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 50%;
+            z-index: 999;
+            background-color: white;
+            font-size:40px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular.min.js"
+            type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-1.12.3.min.js" type="text/javascript"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css">
+    <title>Lagoon 42</title>
+    <base href="/">
+    <script type="text/javascript">
+        var myApp = angular.module('myApp', ['ui.bootstrap']);
+        myApp.config(['$locationProvider', function ($locationProvider) {
+            $locationProvider.html5Mode(true);
+        }]);
+        myApp.controller('OptionsController', ['$scope', '$http', '$location', '$timeout', function ($scope, $http, $location, $timeout) {
+
+            $scope.currency = {
+                name: 'GBP',
+                symbol: '&pound'
+            }
+
+            $scope.exchangeRate = 0.84;
+
+            $scope.total = 0;
+
+            $scope.taxRate = 20; // %
+
+            $scope.basePrice = 0;
+
+            $scope.options = {};
+
+            $scope.options.lagoon = {};
+
+            $scope.options.lagoon.engines = {
+                title: 'Engines',
+                items: [
+                    {
+                        name: 'Yanmar 4JH45 (45hp)',
+                        price: 305000,
+                        excludes: [
+                            {
+                                property: 'lagoon.mechanical.items',
+                                value: '3 blade folding props for Yanmar 57hp'
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Yanmar 4JH57 (57HP)',
+                        price: 306100,
+                        excludes: [
+                            {
+                                property: 'lagoon.mechanical.items',
+                                value: '3 blade folding props for Yanmar 45hp'
+                            }
+                        ]
+                    }
+                ]
+            }
+
+
+            $scope.options.lagoon.layout = {
+                title: 'Layout',
+                items: [
+                    {
+                        name: 'OWNER ( 3 cabin, 3 head ) Layout',
+                        price: 0,
+                        excludes: [
+                            {
+                                property: 'lagoon.interior.items',
+                                value: 'Under bed spring slats for 4 cabin version'
+                            },
+                            {
+                                property: 'lagoon.yukkywater.items',
+                                value: 'Quiet flush electric toilets for 4 head version'
+                            },
+                            {
+                                property: 'lagoon.heating.items',
+                                value: 'Diesel heater with water circuit for 4 cabin 4 head version'
+                            },
+                            {
+                                property: 'lagoon.heating.items',
+                                value: 'Air conditioning Cruisair 48000 BTU 220V for 4 cabin version'
+                            },
+                            {
+                                property: 'lagoon.layout.items',
+                                value: 'Berth in starboard bow compartment (not with 3 cabin version)'
+                            },
+                            {
+                                property: 'lagoon.heating.items',
+                                value: 'Air conditioning Cruisair 48000 BTU 220V for 4 cabin version'
+                            },
+                            {
+                                property: 'lagoon.heating.items',
+                                value: 'Diesel heater with water circuit for 4 cabin 4 head version'
+                            }
+                        ]
+                    },
+                    {
+                        name: 'CHARTER ( 4 cabin, 4 head) Layout',
+                        price: 6000,
+                        excludes: [
+                            {
+                                property: 'lagoon.interior.items',
+                                value: 'Under bed spring slats for 3 cabin version'
+                            },
+                            {
+                                property: 'lagoon.yukkywater.items',
+                                value: 'Quiet flush electric toilets for 3 head version'
+                            },
+                            {
+                                property: 'lagoon.heating.items',
+                                value: 'Diesel heater with water circuit for 3 cabin version'
+                            },
+                            {
+                                property: 'lagoon.heating.items',
+                                value: 'Air conditioning Cruisair 48000 BTU 220V for 3 cabin version'
+                            },
+                            {
+                                property: 'lagoon.heating.items',
+                                value: 'Air conditioning Cruisair 48000 BTU 220V for 3 cabin version'
+                            },
+                            {
+                                property: 'lagoon.heating.items',
+                                value: 'Diesel heater with water circuit for 3 cabin version'
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Berth in port bow compartment',
+                        price: 1250
+                    },
+                    {
+                        name: 'Berth in starboard bow compartment (not with 3 cabin version)',
+                        price: 1250
+                    },
+                ]
+            }
+
+            $scope.options.lagoon.upholstery = {
+                title: 'Upholstery, Curtains & Blinds',
+                items: [
+                    {
+                        name: 'Upholstery in Dark Taupe (saloon and settees)',
+                        price: 280
+                    },
+                    {
+                        name: 'Upholstery in Dove Beige (saloon and settees)',
+                        price: 280
+                    },
+                    {
+                        name: 'Upholstery in Grey Chine (saloon and settees)',
+                        price: 280
+                    },
+                    {
+                        name: 'Upholstery in Seal Brown (saloon and settees)',
+                        price: 280
+                    },
+                    {
+                        name: 'Standard upholstery - shark brown',
+                        price: 0
+                    },
+                    {
+                        name: 'Special upholstery - PVC snow white',
+                        price: 280
+                    },
+                    {
+                        name: 'Leather upholstery in saloon and settee',
+                        price: 1430
+                    },
+                    {
+                        name: 'Curtains on saloon door and aft window (Ombre)',
+                        price: 425
+                    }
+                ]
+            };
+
+            $scope.options.lagoon.rigging = {
+                title: 'Rig & Rigging',
+                items: [
+                    {
+                        name: 'Lazy bag in Graphite',
+                        price: 848
+                    },
+                    {
+                        name: 'Code 0 rig and pole',
+                        price: 4358
+                    },
+                    {
+                        name: 'Asymmetric spinnaker gear',
+                        price: 3228
+                    }
+                ]
+            }
+
+            $scope.options.lagoon.winches = {
+                title: 'Winches',
+                items: [
+                    {
+                        name: 'Electric winch at starboard side of helm, size 46',
+                        price: 2688
+                    }
+                ]
+            }
+
+            $scope.options.lagoon.deckgear = {
+                title: 'Deck & Gear',
+                items: [
+                    {
+                        name: 'Adhesive colour wrap on hull (choice of colours available)',
+                        price: 15685
+                    },
+                    {
+                        name: 'Additional swim ladder with 2nd hot and cold cockpit shower',
+                        price: 908
+                    },
+                    {
+                        name: 'Outboard engine bracket',
+                        price: 822
+                    },
+                    {
+                        name: 'Wooden cockpit coffee table with cover',
+                        price: 668
+                    },
+                    {
+                        name: 'Teak cockpit table',
+                        price: 830
+                    },
+                    {
+                        name: 'Carbon folding gangplank 2.6m / 8.53 ft with cover and 2 sockets',
+                        price: 2629
+                    },
+                    {
+                        name: 'Teak on cockpit floor and transoms',
+                        price: 5120
+                    },
+                    {
+                        name: 'Highfield CL340 RIB in grey with Honda BF20HP',
+                        price: 9676
+                    },
+                    {
+                        name: 'Starboard inflatable paddle board - Lagoon',
+                        price: 930
+                    }
+                ]
+            }
+
+            $scope.options.lagoon.covers = {
+                title: 'Covers & Cushions',
+                items: [
+                    {
+                        name: 'Composite helm bimini with soft windscreen and sides',
+                        price: 10257
+                    },
+                    {
+                        name: '2 sunlounger pads for trampoline in Dark Grey',
+                        price: 788
+                    },
+                    {
+                        name: 'Sunlounger pads for roof in Dark Grey',
+                        price: 1087
+                    },
+                    {
+                        name: 'Aft cockpit cushions in Dark Grey',
+                        price: 3057
+                    },
+                    {
+                        name: 'Cockpit enclosure with windows in Graphite',
+                        price: 3373
+                    },
+                    {
+                        name: 'Sun shades for cockpit area in Graphite',
+                        price: 1601
+                    }
+                ]
+            }
+
+            $scope.options.lagoon.sails = {
+                title: 'Sails',
+                items: [
+                    {
+                        name: 'Dacron square top mainsail in lieu of standard',
+                        price: 340
+                    },
+                    {
+                        name: 'Code 0 sail in black Mylar with king rope',
+                        price: 7563,
+                        excludes: [
+                            {
+                                property: 'ancasta.sails.items',
+                                value: 'Lagoon 42 Code "0" (Ultimate Sails)'
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Reinforced standard sails with lazy bag (not with square top main)',
+                        price: 3208,
+                        excludes: [
+                            {
+                                property: 'lagoon.sails.items',
+                                value: 'Dacron square top mainsail in lieu of standard'
+                            }
+                        ]
+                    }
+                ]
+            }
+
+            $scope.options.lagoon.mechanical = {
+                title: 'Mechanical',
+                items: [
+                    {
+                        name: '3 blade folding props for Yanmar 45hp',
+                        price: 2354
+                    },
+                    {
+                        name: '3 blade folding props for Yanmar 57hp',
+                        price: 2252
+                    }
+                ]
+            }
+
+            $scope.options.lagoon.electronics = {
+                title: 'Electronics',
+                items: [
+                    {
+                        name: 'B&G AIS transceiver with antenna coupling (only with plotter and VHF)',
+                        price: 1122
+                    },
+                    {
+                        name: 'B&G autopilot remote control',
+                        price: 445
+                    },
+                    {
+                        name: 'B&G Zeus 12" plotter at helm with Europe, USA or ROW card',
+                        price: 2578
+                    },
+                    {
+                        name: 'B&G Zeus 12" plotter at nav. stn. with Europe, USA or ROW card',
+                        price: 2422
+                    },
+                    {
+                        name: 'B&G 4G radar (only with plotter)',
+                        price: 2432
+                    },
+                    {
+                        name: 'B&G WiFi module',
+                        price: 253
+                    },
+                    {
+                        name: 'B&G V50 VHF',
+                        price: 728
+                    },
+                    {
+                        name: '2nd handset for B&G V50 VHF',
+                        price: 284
+                    },
+                    {
+                        name: 'B&G Forward Scan sounder',
+                        price: 1370
+                    }
+                ]
+            }
+
+            $scope.options.lagoon.electrics = {
+                title: 'Electrics & Charging',
+                items: [
+                    {
+                        name: 'USB sockets in cabins (4)',
+                        price: 230
+                    },
+                    {
+                        name: 'Gel service batteries in lieu of std. acid batteries',
+                        price: 942
+                    },
+                    {
+                        name: 'Inverter 12 / 220V 2000W',
+                        price: 2688
+                    },
+                    {
+                        name: 'Inverter 12 / 220V 700W',
+                        price: 2183
+                    },
+                    {
+                        name: 'Genset Onan 11 Kva 220v/50 Hz with cocoon',
+                        price: 21421
+                    },
+                    {
+                        name: 'Flexible solar panels on roof, 3 x 120W',
+                        price: 4024
+                    },
+                ]
+            }
+
+            $scope.options.lagoon.entertainment = {
+                title: 'Entertainment',
+                items: [
+                    {
+                        name: '24" TV with DVD and MP3 player in owner cabin',
+                        price: 1992
+                    },
+                    {
+                        name: '40" TV with DVD and MP3 player in the saloon',
+                        price: 2719
+                    },
+                    {
+                        name: 'TV antenna',
+                        price: 305
+                    },
+                ]
+            }
+
+            $scope.options.lagoon.interior = {
+                title: 'Interior',
+                items: [
+                    {
+                        name: 'Saloon table double berth conversion',
+                        price: 257
+                    },
+                    {
+                        name: 'Fitted carpets in cabins',
+                        price: 1798
+                    },
+                    {
+                        name: 'Under bed spring slats for 4 cabin version',
+                        price: 664
+                    },
+                    {
+                        name: 'Under bed spring slats for 3 cabin version',
+                        price: 514
+                    },
+                ]
+            }
+
+            $scope.options.lagoon.galley = {
+                title: 'Galley Equipment, Refrigeration and Laundry',
+                items: [
+                    {
+                        name: 'Additional fridge, top opening, 12V/100L (not with additional freezer)',
+                        price: 1507
+                    },
+                    {
+                        name: 'Freezer, top opening, 12V/100L (not with additional fridge)',
+                        price: 1884
+                    },
+                    {
+                        name: 'Stainless steel fridge in lieu of standard',
+                        price: 1550
+                    },
+                    {
+                        name: 'Cockpit fridge',
+                        price: 1062
+                    },
+                    {
+                        name: 'Ice maker in cockpit 220V',
+                        price: 2885
+                    },
+                    {
+                        name: 'Locker and microwave oven with grill 220V (no locker without this option)',
+                        price: 1190
+                    },
+                    {
+                        name: 'Washer/dryer 220V',
+                        price: 2346
+                    },
+                ]
+            };
+
+            $scope.options.lagoon.freshwater = {
+                title: 'Fresh Water',
+                items: [
+                    {
+                        name: 'Additional fresh water tank 300L',
+                        price: 856
+                    },
+                    {
+                        name: 'Watermaker Dessalator 63 L/H 12V',
+                        price: 11935
+                    },
+                ]
+            };
+
+            $scope.options.lagoon.yukkywater = {
+                title: 'Black & Grey Water',
+                items: [
+                    {
+                        name: 'Quiet Flush electric toilets for 3 head version',
+                        price: 1901
+                    },
+                    {
+                        name: 'Quiet flush electric toilets for 4 head version',
+                        price: 2594
+                    },
+                ]
+            };
+
+            $scope.options.lagoon.heating = {
+                title: 'Heating & Air Conditioning',
+                items: [
+                    {
+                        name: 'Diesel heater with water circuit for 3 cabin version',
+                        price: 9623
+                    },
+                    {
+                        name: 'Diesel heater with water circuit for 4 cabin 4 head version',
+                        price: 10428
+                    },
+                    {
+                        name: '12V fans in cabins and saloon',
+                        price: 702
+                    },
+                    {
+                        name: 'Air conditioning Cruisair 48000 BTU 220V for 3 cabin version',
+                        price: 18188,
+                        excludes: [
+                            {
+                                property: 'ancasta.heating.items',
+                                value: '10,000 BTU air-conditioning to two outlets'
+                            },
+                            {
+                                property: 'ancasta.heating.items',
+                                value: '12,000 BTU air-conditioning to two outlets'
+                            },
+                            {
+                                property: 'ancasta.heating.items',
+                                value: '16,000 BTU air-conditioning to single outlet'
+                            },
+                            {
+                                property: 'ancasta.heating.items',
+                                value: '16,000 BTU air-conditioning to two outlets'
+                            },
+                        ]
+                    },
+                    {
+                        name: 'Air conditioning Cruisair 48000 BTU 220V for 4 cabin version',
+                        price: 20438
+                    },
+                ]
+            };
+
+            $scope.options.ancasta = {};
+
+            $scope.options.ancasta.safetypacks = {
+                title: 'Safety Packages',
+                items: [
+                    {
+                        name: 'Lagoon 6 Man Safety Package',
+                        price: 3591
+                    },
+                    {
+                        name: 'Lagoon 8 Man Safety Package',
+                        price: 4093
+                    },
+                ]
+            };
+
+            $scope.options.ancasta.deck = {
+                title: 'Deck and Gear',
+                items: [
+                    {
+                        name: 'Blanks for deck hatches x 1',
+                        price: 139
+                    },
+                    {
+                        name: 'Blanks for deck hatches x 5',
+                        price: 430
+                    },
+                    {
+                        name: 'Carbon gangway 220cm (folding) with storage bag, deck fitting, triangle trapeze and safety catch',
+                        price: 3003
+                    },
+                    {
+                        name: 'Carbon gangway 260cm (folding) with storage bag, deck fitting, triangle trapeze and safety catch',
+                        price: 3752
+                    },
+                    {
+                        name: 'Carbon gangway 320cm (folding), storage bag, deck fitting, triangle trapeze and safety catch',
+                        price: 5498
+                    },
+                    {
+                        name: 'Carbon look stanchions and rope for gangway',
+                        price: 548
+                    },
+                    {
+                        name: 'Boat name on gangway',
+                        price: 224
+                    }
+                ]
+            };
+
+            $scope.options.ancasta.covers = {
+                title: 'Covers & Canvas',
+                items: [
+                    {
+                        name: 'Webbing lifelines (white) set to side decks 4',
+                        price: 152
+                    },
+                    {
+                        name: 'Webbing lifelines between bow of each hull',
+                        price: 92
+                    }
+                ]
+            };
+
+            $scope.options.ancasta.sails = {
+                title: 'Sails',
+                items: [
+                    {
+                        name: 'Lagoon 42 cruising chute (Ultimate Sails)',
+                        price: 4216
+                    },
+                    {
+                        name: 'Lagoon 42 Code "0" (Ultimate Sails)',
+                        price: 7161,
+                        excludes: [
+                            {
+                                property: 'lagoon.sails.items',
+                                value: 'Code 0 sail in black Mylar with king rope'
+                            }
+                        ]
+                    },
+                    {
+                        name: 'Lagoon 42 snuffer (Ultimate Sails)',
+                        price: 530
+                    }
+                ]
+            };
+
+            $scope.options.ancasta.interior = {
+                title: 'Interior',
+                items: [
+                    {
+                        name: 'Embroidered saloon cushion (boat name)',
+                        price: 57
+                    },
+                    {
+                        name: 'Embroidered towel pack',
+                        price: 111
+                    },
+                    {
+                        name: 'Double cabin bedding linen set (per cabin)',
+                        price: 491
+                    },
+                    {
+                        name: 'Luxury linen bed set',
+                        price: 654
+                    },
+                    {
+                        name: 'Maximus custom pocket sprung double mattress with cashmere quilted cover',
+                        price: 1691
+                    },
+                    {
+                        name: 'Maximus custom pocket-sprung double mattress (zips into two parts) with cashmere quilted cover',
+                        price: 2942
+                    }
+                ]
+            };
+
+            $scope.options.ancasta.heating = {
+                title: 'Heating & Air Conditioning',
+                items: [
+                    {
+                        name: '10,000 BTU air-conditioning to two outlets',
+                        price: 4955
+                    },
+                    {
+                        name: '12,000 BTU air-conditioning to two outlets',
+                        price: 5117
+                    },
+                    {
+                        name: '16,000 BTU air-conditioning to single outlet',
+                        price: 5449
+                    },
+                    {
+                        name: '16,000 BTU air-conditioning to two outlets',
+                        price: 5615
+                    },
+                    {
+                        name: 'Overseas installation supplement (single unit)',
+                        price: 1472
+                    },
+                    {
+                        name: 'Overseas installation supplement (multiple unit)',
+                        price: 1963
+                    }
+                ]
+            };
+
+            $scope.options.ancasta.power = {
+                title: 'Power Supply & Management',
+                items: [
+                    {
+                        name: 'Fischer Panda PMS 4000S FC generator (3.8Kw)',
+                        price: 9993
+                    },
+                    {
+                        name: 'Fischer Panda 5000i generator (5kVA)',
+                        price: 12991
+                    },
+                    {
+                        name: 'Overseas installation supplement for AGT 4000 / 4000S FC / 4000i',
+                        price: 1963
+                    },
+                    {
+                        name: 'Super Silent Gas Water Separator for Fischer Panda generators (Recommended)',
+                        price: 491
+                    },
+                    {
+                        name: 'Standard Fischer Panda Spares kit',
+                        price: 183
+                    },
+                    {
+                        name: 'Blue water Fischer Panda spares kit',
+                        price: 566
+                    }
+                ]
+            };
+
+            $scope.options.ancasta.plotters = {
+                title: 'Plotters & Systems',
+                items: [
+                    {
+                        name: 'Navionics Gold cartridge',
+                        price: 246
+                    },
+                    {
+                        name: 'Navionics Platinum Plus cartridget',
+                        price: 322
+                    }
+                ]
+            };
+
+            $scope.options.ancasta.communications = {
+                title: 'Communications',
+                items: [
+                    {
+                        name: 'Icom M25 VHF (buoyant) - blue',
+                        price: 153
+                    },
+                    {
+                        name: 'Icom M25 VHF (buoyant) grey',
+                        price: 155
+                    }
+                ]
+            };
+
+            $scope.options.ancasta.safety = {
+                title: 'Safety',
+                items: [
+                    {
+                        name: 'KRU Elite (Ocean Blue) lifejacket automatic, c/w harness',
+                        price: 181
+                    },
+                    {
+                        name: 'KRU Elite (Black) lifejacket, automatic c/w harness',
+                        price: 181
+                    },
+                    {
+                        name: 'KRU Elite (Red) lifejacket, automatic, c/w harness',
+                        price: 181
+                    },
+                    {
+                        name: 'KRU Sports Pro lifejacket (black) - automatic, c/w harness, sprayhood & stowage bag',
+                        price: 129
+                    },
+                    {
+                        name: 'KRU Sports Pro lifejacket (navy) - automatic, c/w harness, sprayhood & stowage bag',
+                        price: 129
+                    },
+                    {
+                        name: 'KRU Sports 185 (Blue/Grey) lifejacket, automatic, c/w harness',
+                        price: 67
+                    },
+                    {
+                        name: 'KRU Sports 185 (Black) lifejacket, automatic, c/w harness',
+                        price: 67
+                    },
+                    {
+                        name: 'KRU Sports 185 (Red/Grey) lifejacket, automatic, c/w harness',
+                        price: 67
+                    },
+                    {
+                        name: 'KRU Junior Lifejacket (20-50Kg)',
+                        price: 74
+                    },
+                    {
+                        name: 'Spinlock deckVest lifejacket/harness',
+                        price: 210
+                    },
+                    {
+                        name: 'Ocean Signal MOB1 option for Spinlock lifejacket',
+                        price: 273
+                    },
+                    {
+                        name: 'Hammar auto-inflation option for Spinlock DeckVest',
+                        price: 19
+                    },
+                    {
+                        name: 'Spinlock Mast Pro harness, including anti abrasion covers',
+                        price: 88
+                    },
+                    {
+                        name: 'Spinlock Deckvest Lite',
+                        price: 134
+                    },
+                    {
+                        name: 'Spinlock Deckvest Cento Junior lifejacket/harness',
+                        price: 126
+                    },
+                    {
+                        name: 'AQ40 lifejacket light',
+                        price: 19
+                    },
+                    {
+                        name: 'Safety line 2 hook locking',
+                        price: 36
+                    },
+                    {
+                        name: 'Safety line 3 hook locking',
+                        price: 51
+                    },
+                    {
+                        name: "Thermal Protective Aids (TPA's)",
+                        price: 14
+                    },
+                    {
+                        name: 'Ocean Signal Rescue Me personal AIS/DSC',
+                        price: 239
+                    },
+                    {
+                        name: 'Ocean Signal Rescue Me 406 PLB',
+                        price: 262
+                    },
+                    {
+                        name: 'Ocean Signal Rescue Me Cat2 406 GPS EPIRB',
+                        price: 354
+                    },
+                    {
+                        name: 'Lifebuoy & holder c/w Apollo light (white)',
+                        price: 73
+                    },
+                    {
+                        name: 'Lifebuoy & holder c/w Apollo light, lifebuoy drogue & pocket, reflective tape & whistle for MCA (white)',
+                        price: 91
+                    },
+                    {
+                        name: 'Name & MMSI on lifebuoy',
+                        price: 41
+                    },
+                    {
+                        name: 'Lifebuoy drogue & pocket',
+                        price: 12
+                    },
+                    {
+                        name: 'Throwing line & holder',
+                        price: 43
+                    },
+                    {
+                        name: 'KIM throwing line & recovery strop',
+                        price: 62
+                    },
+                    {
+                        name: 'Signal (motor-sailing) cone',
+                        price: 7
+                    },
+                    {
+                        name: 'Ocean Safety signal ball',
+                        price: 7
+                    },
+                    {
+                        name: 'Jonbuoy rescue sling',
+                        price: 118
+                    },
+                    {
+                        name: 'Jonbuoy inflatable horseshoe in single hard case',
+                        price: 102
+                    },
+                    {
+                        name: 'Jonbuoy inflatable Danbuoy c/w light',
+                        price: 174
+                    },
+                    {
+                        name: 'Manual foghorn',
+                        price: 6
+                    },
+                    {
+                        name: 'Gas foghorn & canister set',
+                        price: 9
+                    },
+                    {
+                        name: 'Spare cylinder for gas foghorn',
+                        price: 6
+                    },
+                    {
+                        name: 'Softwood bungs pack',
+                        price: 17
+                    },
+                    {
+                        name: 'Cat C First Aid kit (soft pack)',
+                        price: 57
+                    },
+                    {
+                        name: 'Offshore First Aid Kit',
+                        price: 49
+                    },
+                    {
+                        name: 'Ocean Safety Code of Practice First Aid kit',
+                        price: 96
+                    },
+                    {
+                        name: 'Set of COP labels (safety gear; lifejackets; harnesses; flares; med kit; liferaft; emergency exit)',
+                        price: 57
+                    },
+                    {
+                        name: "Ship's Bell",
+                        price: 57
+                    },
+                    {
+                        name: 'Crewmedic 180S first aid kit',
+                        price: 62
+                    },
+                    {
+                        name: 'Headstart HS1 Defibrilator',
+                        price: 1789
+                    },
+                    {
+                        name: 'Ocean Safety rapid ditch bag',
+                        price: 98
+                    },
+                    {
+                        name: "Bosun's chair",
+                        price: 98
+                    },
+                    {
+                        name: 'Emergency VHF aerial',
+                        price: 79
+                    },
+                    {
+                        name: 'Code of Practice training manual',
+                        price: 112
+                    },
+                    {
+                        name: 'SOLAS No 2 table',
+                        price: 4
+                    },
+                    {
+                        name: '12v search light',
+                        price: 170
+                    },
+                    {
+                        name: 'MCA torch c/w spare bulb',
+                        price: 11
+                    },
+                    {
+                        name: 'Ocean Signal EDF1 Electronic LED Flare',
+                        price: 102
+                    },
+                    {
+                        name: 'RORC radar reflector',
+                        price: 22
+                    },
+                    {
+                        name: 'Gas emergency action card',
+                        price: 11
+                    }
+                ]
+            };
+
+            $scope.options.ancasta.liferafts = {
+                title: 'Liferafts',
+                items: [
+                    {
+                        name: 'Ocean ISO9650 raft 6M C',
+                        price: 1745
+                    },
+                    {
+                        name: 'Ocean ISO9650 raft 8M C',
+                        price: 1878
+                    },
+                    {
+                        name: 'Ocean ISO9650 raft 10M C',
+                        price: 2010
+                    },
+                    {
+                        name: 'Ocean ISO9650 raft 12M C',
+                        price: 2112
+                    },
+                    {
+                        name: 'ISO SOLAS B upgrade grab bag for ISO9650 liferafts 4 person',
+                        price: 518
+                    },
+                    {
+                        name: 'ISO SOLAS B upgrade grab bag for ISO9650 liferafts 6 person',
+                        price: 540
+                    },
+                    {
+                        name: 'ISO SOLAS B upgrade grab bag for ISO9650 liferafts 8 person',
+                        price: 562
+                    },
+                    {
+                        name: 'ISO SOLAS B upgrade grab bag for ISO9650 liferafts 10 person',
+                        price: 583
+                    },
+                    {
+                        name: 'ISO SOLAS B upgrade grab bag for ISO9650 liferafts 12 person',
+                        price: 610
+                    },
+                    {
+                        name: 'ORC Universal canister liferaft cradle (up to 8 man size capacity)',
+                        price: 153
+                    },
+                    {
+                        name: 'Hydrostatic release',
+                        price: 66
+                    },
+                    {
+                        name: 'Liferaft lashing strap for liferaft cradle',
+                        price: 57
+                    },
+                    {
+                        name: 'Liferaft lashing strap (for liferaft without cradle)',
+                        price: 63
+                    },
+                    {
+                        name: 'Fitting of deck mounted cradle',
+                        price: 137
+                    }
+                ]
+            };
+
+            $scope.options.ancasta.firefighting = {
+                title: 'Firefighting',
+                items: [
+                    {
+                        name: 'Fire blanket (1.1m x 1.1m)',
+                        price: 16
+                    },
+                    {
+                        name: 'Fire extinguisher 1Kg dry powder',
+                        price: 31
+                    },
+                    {
+                        name: 'Fire extinguisher 2kg 13A/89B dry powder',
+                        price: 40
+                    },
+                    {
+                        name: 'Fire extinguisher 4kg 21A/113B dry powder inshore',
+                        price: 73
+                    },
+                    {
+                        name: 'Bracket for fire extinguisher',
+                        price: 17
+                    },
+                    {
+                        name: 'Fire extinguisher (for engine bay) GTFE2000 2Kg',
+                        price: 243
+                    },
+                    {
+                        name: 'Smoke alarm',
+                        price: 14
+                    }
+                ]
+            };
+
+            $scope.options.ancasta.dinghies = {
+                title: 'Dinghies & Outboards',
+                items: [
+                    {
+                        name: 'Zodiac Cadet 340 RIB',
+                        price: 2748
+                    },
+                    {
+                        name: 'Ribeye TS310 RIB (aluminium hull / PVC tubes)',
+                        price: 2454
+                    },
+                    {
+                        name: 'Ribeye TS350 RIB (aluminium hull / PVC tubes)',
+                        price: 2617
+                    },
+                    {
+                        name: 'Yamaha F6 AMH (short shaft)',
+                        price: 1309
+                    },
+                    {
+                        name: 'Yamaha F8 CMH (Short shaft)',
+                        price: 2118
+                    },
+                    {
+                        name: 'Yamaha F9.9 FMH Tiller Manual (Short shaft)',
+                        price: 2351
+                    },
+                    {
+                        name: 'Yamaha F15 CMH (short shaft)',
+                        price: 2606
+                    },
+                ]
+            };
+
+            $scope.options.ancasta.delivery = {
+                title: 'Delivery and Commissioning',
+                items: [
+                    {
+                        name: "Deliver 42 to Les Sables d'Olonne",
+                        price: 4367
+                    },
+                    {
+                        name: 'Commissioning',
+                        price: 11839
+                    }
+                ]
+            };
+
+            $scope.packages = [
+                {
+                    name: 'essential',
+                    title: 'Lagoon 42 Essential Equipment Configuration',
+                    items: [
+                        'Upper storage in saloon to starboard',
+                        'Pulpits with wooden seats',
+                        'MS Fusion music system with 2 speakers in saloon',
+                        'Leather bulkhead organizers in cabins',
+                        'Aft portholes in aft cabins with curtains',
+                        'Battery controller',
+                        'Shore power circuit and 40A battery charger',
+                        'Indirect lighting in cabins and saloon',
+                        'Electrical manoevring winch to port, size 46',
+                        'Navigation pack',
+                        'Waterproof speakers in cockpit',
+                        'Additional fuel tank, 300L, in port engine room',
+                        '2 additional service batteries, 140AH',
+                        'Dinghy hoist system',
+                        'Flag halyards on spreaders',
+                        'Upholstered helm seat',
+                        'Locker under helm station'
+                    ],
+                    price: 19000
+                },
+                {
+                    name: 'comfort',
+                    title: 'Lagoon 42 Comfort Equipment Configuration',
+                    items: [
+                        'Upper storage in saloon to starboard',
+                        'Pulpits with wooden seats',
+                        'MS Fusion music system with 2 speakers in saloon',
+                        'Leather bulkhead organizers in cabins',
+                        'Aft portholes in aft cabins with curtains',
+                        'Battery controller',
+                        'Shore power circuit and 40A battery charger',
+                        'Indirect lighting in cabins and saloon',
+                        'Electrical manoevring winch to port, size 46',
+                        'Navigation pack',
+                        'Waterproof speakers in cockpit',
+                        'Additional fuel tank, 300L, in port engine room',
+                        '2 additional service batteries, 140AH',
+                        'Dinghy hoist system',
+                        'Flag halyards on spreaders',
+                        'Upholstered helm seat',
+                        'Locker under helm station',
+                        'Fresh water dock inlet',
+                        'Deck wash pump, sea or fresh water',
+                        'Sea or fresh water foot pump in galley'
+                    ],
+                    price: 20000
+                }
+            ];
+
+            $scope.displayPrice = function (item) {
+                if (typeof item.displayPrice !== 'undefined') {
+                    return item.displayPrice * $scope.exchangeRate;
+                } else {
+                    return item.price * $scope.exchangeRate;
+                }
+            }
+
+            $scope.value = function (obj, i) {
+                return obj[i];
+            };
+
+            $scope.selectPackage = function (selectedPackage) {
+                angular.forEach($scope.packages, function (package) {
+                    if (selectedPackage === package) {
+                        $scope.total += package.price * $scope.exchangeRate;
+                    } else {
+                        package.selected = false;
+                    }
+                });
+                $scope.calcTotal();
+            }
+
+            $scope.calcTotal = function () {
+                $scope.link = '';
+                $scope.total = 0;
+                total += $scope.basePrice * $scope.exchangeRate;
+
+                angular.forEach($scope.packages, function (package) {
+                    if (package.selected === true) {
+                        $scope.total += package.price * $scope.exchangeRate;
+                    }
+                })
+
+                angular.forEach($scope.options, function (option, key) {
+                    angular.forEach(option, function (optionItem) {
+                        for (var i = 0; i < optionItem.items.length; i++) {
+                            if (optionItem.items[i].selected == true) {
+                                $scope.total += $scope.displayPrice(optionItem.items[i]);
+                            }
+                            if (optionItem.items[i].excludes) {
+                                for (var ii = 0; ii < optionItem.items[i].excludes.length; ii++) {
+                                    var myItems = optionItem.items[i].excludes[ii].property.split('.').reduce($scope.value, $scope.options);
+                                    angular.forEach(myItems, function (item) {
+                                        if (item.name === optionItem.items[i].excludes[ii].value) {
+                                            if (optionItem.items[i].selected == true) {
+                                                item.disabled = true;
+                                                item.selected = false;
+                                                item.tooltip = "Not available with " + optionItem.items[i].name;
+                                            } else {
+                                                item.disabled = false;
+                                                item.tooltip = null;
+                                            }
+                                        }
+                                    })
+                                }
+                            }
+                        }
+                    })
+                });
+            }
+
+            $scope.calcOptionTotal = function (option) {
+                var total = 0;
+                angular.forEach(option.items, function (item) {
+                    if (item.selected == true) {
+                        total += $scope.displayPrice(item);
+                    }
+                })
+
+                return total;
+            };
+
+            $scope.countSelectedOptions = function (section) {
+                var selected = 0;
+                angular.forEach($scope.options[section], function (value, key) {
+                    angular.forEach(value.items, function (value, key) {
+                        if (value.selected === true) {
+                            selected++;
+                        }
+                    })
+                })
+                return selected;
+            }
+
+            $scope.save = function () {
+                var config =
+                    {
+                        options: $scope.options,
+                        packages: $scope.packages
+                    }
+                ;
+                $http.post('/server.php', {config: config})
+                    .then(function (response) {
+                        $scope.link = 'http://' + $location.host() + $location.path() + '?config=' + response.data.config;
+                    }, function (error) {
+                        alert(error);
+                    })
+            }
+
+            if (typeof $location.search().config !== 'undefined') {
+                $http.get('/server.php?config=' + $location.search().config)
+                    .then(function (response) {
+                        $scope.options = response.data.options;
+                        $scope.packages = response.data.packages;
+                        $scope.link = response.data.key;
+                        $timeout($scope.calcTotal, 100);
+                    }, function (error) {
+                        alert(error);
+                    })
+            }
+
+
+        }]);
+    </script>
+</head>
+<body ng-app="myApp" ng-controller="OptionsController" ng-init="calcTotal()">
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 form-inline">
+            <div id="total">Total inc {{taxRate}}% tax: &pound;{{total * (1 +
+                taxRate/100)
+                | number : 2}} <span style="font-size:12px">ex tax {{total|number}}</span></div>
+            <div style="margin:90px 0 50px 0;width:100%" class="form-group">
+                <button type="button" class="btn btn-success" ng-click="save()">Get shareable link of config chosen </button>
+                <input ng-model="link" class="form-control" style="min-width:60%">
+            </div>
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a data-target="#packages" aria-controls="packages" role="tab" data-toggle="tab">Packages</a></li>
+                <li role="presentation">
+                    <a data-target="#lagoon" aria-controls="lagoon" role="tab" data-toggle="tab">Lagoon Fit Options
+                        ({{countSelectedOptions('lagoon')}})</a>
+                </li>
+                <li role="presentation">
+                    <a data-target="#ancasta" aria-controls="ancasta" role="tab" data-toggle="tab">Ancasta Fit Options
+                        ({{countSelectedOptions('ancasta')}})</a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div role="tabpanel" id="packages" class="tab-pane fade in active">
+                    <div ng-repeat="package in packages" style="float:left">
+                        <input type="radio" ng-model="package.selected" name="package" ng-value="true"
+                               ng-change="selectPackage(package)"> {{package.title}}
+                        <ul>
+                            <li ng-repeat="item in package.items">{{item}}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div role="tabpanel" ng-repeat="(key, option) in options" class="tab-pane fade in" id="{{key}}"
+                     ng-include="'/options.html'"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <img src="lagoon42.jpg" width="100%"/><br/>
+            <img src="salon.jpg" width="100%"/><br/>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
