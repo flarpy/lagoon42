@@ -527,11 +527,23 @@
                 items: [
                     {
                         name: 'Additional fridge, top opening, 12V/100L (not with additional freezer)',
-                        price: 1507
+                        price: 1507,
+                        excludes: [
+                            {
+                                property: 'lagoon.galley.items',
+                                value: 'Freezer, top opening, 12V/100L (not with additional fridge)'
+                            }
+                        ]
                     },
                     {
                         name: 'Freezer, top opening, 12V/100L (not with additional fridge)',
-                        price: 1884
+                        price: 1884,
+                        excludes: [
+                            {
+                                property: 'lagoon.galley.items',
+                                value: 'Additional fridge, top opening, 12V/100L (not with additional freezer)'
+                            }
+                        ]
                     },
                     {
                         name: 'Stainless steel fridge in lieu of standard',
